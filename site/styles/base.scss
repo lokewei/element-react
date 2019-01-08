@@ -41,8 +41,8 @@ body {
       &:after {
         position: absolute;
         top: -7px;
-        right: -50px;
-        content: 'React';
+        right: -100px;
+        content: 'React-Fancy';
         font-size: 13px;
         font-weight: bold;
         text-transform: uppercase;
@@ -118,6 +118,29 @@ body {
         background: #99d2fc;
       }
     }
+
+    .themes {
+      position: absolute;
+      right: 80px;
+      height: 80px;
+      line-height: 80px;
+      list-style: none;
+
+      padding: 35px;
+      li {
+        float: left;
+        width: 12px;
+        height: 12px;
+        border-radius: 4px;
+        margin: 0 5px;
+        box-sizing: border-box;
+
+        &.active, &:hover, &:focus {
+          border: 1px solid #fff;
+        }
+      }
+    }
+
   }
 
   .main {
@@ -297,6 +320,7 @@ body {
   }
 
   .source {
+    // background-color: #404040;
     position: relative;
     padding: 24px;
   }

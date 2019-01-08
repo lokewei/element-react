@@ -99,6 +99,15 @@ export default class App extends React.Component {
     }
   }
 
+  switchTheme(theme) {
+    if (theme === 'blue') {
+      location.pathname = '/';
+    }
+    if (theme === 'dark') {
+      location.pathname = '/dark';
+    }
+  }
+
   render() {
     return (
       <div className="app">
@@ -123,6 +132,10 @@ export default class App extends React.Component {
                 <span className={classnames('nav-lang', { active: this.state.locale === 'en-US'})} onClick={this.setLocale.bind(this, 'en-US')}>En</span>
               </li>
             </ul>
+            {/* <ul className="themes">
+              <li title="blue" className={location.pathname === '/' ? 'active' : ''} style={{ backgroundColor: '#20a0ff' }} onClick={() => this.switchTheme('blue')}></li>
+              <li title="dark" className={location.pathname === '/dark' ? 'active' : ''} style={{ backgroundColor: '#2b2b2b' }} onClick={() => this.switchTheme('dark')}></li>
+            </ul> */}
           </div>
         </header>
         <div className="main container">

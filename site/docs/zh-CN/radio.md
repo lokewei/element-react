@@ -42,7 +42,7 @@ render() {
 render() {
   return (
     <div>
-      <Radio value="1" disabled={true}>备选项</Radio>
+      <Radio value="1" checked disabled={true}>备选项</Radio>
       <Radio value="2" disabled={true}>备选项</Radio>
     </div>
   )

@@ -12,6 +12,7 @@ render() {
   return (
     <div>
       <Button>默认按钮</Button>
+      <Button plain>朴素按钮</Button>
       <Button type="primary">主要按钮</Button>
       <Button type="text">文字按钮</Button>
     </div>
@@ -30,7 +31,8 @@ render() {
 render() {
   return (
     <div>
-      <Button plain={true} disabled={true}>默认按钮</Button>
+      <Button disabled={true}>默认按钮</Button>
+      <Button plain={true} disabled={true}>朴素按钮</Button>
       <Button type="primary" disabled={true}>主要按钮</Button>
       <Button type="text" disabled={true}>文字按钮</Button>
     </div>
@@ -109,9 +111,9 @@ render() {
           <Button type="primary">下一页<i className="el-icon-arrow-right el-icon-right"></i></Button>
       </Button.Group>
       <Button.Group>
-          <Button type="primary" icon="edit"></Button>
-          <Button type="primary" icon="share"></Button>
-          <Button type="primary" icon="delete"></Button>
+          <Button icon="edit"></Button>
+          <Button icon="share"></Button>
+          <Button icon="delete"></Button>
       </Button.Group>
     </div>
   )
