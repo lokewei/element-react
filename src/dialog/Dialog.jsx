@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Component, View, Transition, PropTypes } from '../../libs';
+import { cleanScrollBar } from '../table/utils';
 
 type State = {
   bodyOverflow: string,
@@ -24,60 +25,65 @@ export default class Dialog extends Component {
 
   constructor(props: Object) {
     super(props);
-
+    this.wrap = React.createRef();
     this.state = {
       bodyOverflow: ''
     }
   }
 
   componentWillReceiveProps(nextProps: Object): void {
-
-      if (this.willOpen(this.props, nextProps)){
-        if (this.props.lockScroll && document.body && document.body.style) {
-          if (!this.state.bodyOverflow) {
-            this.setState({
-              bodyOverflow: document.body.style.overflow
-            });
-          }
-          document.body.style.overflow = 'hidden';
+    const { bodyOverflow } = this.state;
+    const { lockScroll, modal } = this.props;
+    if (this.willOpen(this.props, nextProps)) {
+      cleanScrollBar();
+      if (lockScroll && document.body && document.body.style) {
+        if (!bodyOverflow) {
+          this.setState({
+            bodyOverflow: document.body.style.overflow
+          });
         }
+        document.body.style.overflow = 'hidden';
       }
+    }
 
-      if (this.willClose(this.props, nextProps) && this.props.lockScroll) {
-        if (this.props.modal && this.state.bodyOverflow !== 'hidden' && document.body && document.body.style) {
-          document.body.style.overflow = this.state.bodyOverflow;
-        }
+    if (this.willClose(this.props, nextProps) && lockScroll) {
+      if (modal && bodyOverflow !== 'hidden' && document.body && document.body.style) {
+        document.body.style.overflow = bodyOverflow;
       }
+    }
 
   }
 
   componentDidUpdate(prevProps: Object): void {
-    if (this.willOpen(prevProps, this.props)){
-      this.refs.wrap.focus();
+    if (this.willOpen(prevProps, this.props)) {
+      this.wrap.current.focus();
     }
   }
 
   componentWillUnmount(): void {
-    if (this.props.lockScroll && document.body && document.body.style) {
+    const { lockScroll } = this.props;
+    if (lockScroll && document.body && document.body.style) {
       document.body.style.removeProperty('overflow');
     }
   }
 
-  onKeyDown(e: SyntheticKeyboardEvent): void {
-    if (this.props.closeOnPressEscape && e.keyCode === 27) {
+  onKeyDown(e: SyntheticKeyboardEvent<any>): void {
+    const { closeOnPressEscape } = this.props;
+    if (closeOnPressEscape && e.keyCode === 27) {
       this.close(e);
     }
   }
 
-  handleWrapperClick(e: SyntheticEvent): void {
+  handleWrapperClick(e: SyntheticEvent<HTMLDivElement>): void {
+    const { closeOnClickModal } = this.props;
     if (e.target instanceof HTMLDivElement) {
-      if (this.props.closeOnClickModal && e.target === e.currentTarget) {
+      if (closeOnClickModal && e.target === e.currentTarget) {
         this.close(e);
       }
     }
   }
 
-  close(e: SyntheticEvent | SyntheticKeyboardEvent): void {
+  close(e: any): void {
     this.props.onCancel(e);
   }
 
@@ -89,45 +95,45 @@ export default class Dialog extends Component {
     return (prevProps.visible && !nextProps.visible);
   }
 
-  render(): React.Element<any> {
-    const { visible, title, size, top, modal, customClass, showClose } = this.props;
+  render(): React.DOM {
+    const { visible, title, size, top, modal, customClass, showClose, children } = this.props;
 
     return (
       <div>
         <Transition name="dialog-fade">
-          <View show={ visible }>
+          <View show={visible}>
             <div
-              ref="wrap"
+              ref={this.wrap}
               style={{ zIndex: 1013 }}
               className={this.classNames('el-dialog__wrapper')}
-              onClick={ e => this.handleWrapperClick(e) }
-              onKeyDown={ e => this.onKeyDown(e) }
+              onClick={e => this.handleWrapperClick(e)}
+              onKeyDown={e => this.onKeyDown(e)}
             >
               <div
                 ref="dialog"
-                style={this.style(size === 'full' ?  {} : { 'top': top })}
-                className={ this.className("el-dialog", `el-dialog--${ size }`, customClass) }
+                style={this.style(size === 'full' ? {} : { 'top': top })}
+                className={this.className("el-dialog", `el-dialog--${ size }`, customClass)}
               >
                 <div className="el-dialog__header">
-                  <span className="el-dialog__title">{ title }</span>
+                  <span className="el-dialog__title">{title}</span>
                   {
                     showClose && (
-                      <button type="button" className="el-dialog__headerbtn" onClick={ e => this.close(e)} >
-                        <i className="el-dialog__close el-icon el-icon-close"></i>
+                      <button type="button" className="el-dialog__headerbtn" onClick={e => this.close(e)}>
+                        <i className="el-dialog__close el-icon el-icon-close" />
                       </button>
                     )
                   }
                 </div>
-                { this.props.children }
+                {children}
               </div>
             </div>
           </View>
         </Transition>
         {
           modal && (
-              <View show={ visible }>
-                <div className="v-modal" style={{ zIndex: 1012 }}></div>
-              </View>
+            <View show={visible}>
+              <div className="v-modal" style={{ zIndex: 1012 }} />
+            </View>
           )
         }
       </div>

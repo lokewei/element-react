@@ -6,6 +6,15 @@ const _document = (document: any);
 
 let scrollBarWidth: ?number;
 
+export const cleanScrollBar = () => {
+  document.querySelectorAll('.el-table__body-wrapper').forEach(el => {
+    setTimeout(() => {
+      el.style.overflow = 'hidden';
+      setTimeout(() => el.style.overflow = 'auto');
+    });
+  });
+};
+
 export function getScrollBarWidth(): ?number {
   if (scrollBarWidth !== undefined) return scrollBarWidth;
   const dom = _document.createElement('div');
@@ -29,7 +38,7 @@ export function getScrollBarWidth(): ?number {
 
 export function getValueByPath(data: Object, path: ?string): any {
   if (typeof path !== 'string') return null;
-  return path.split('.').reduce((pre, cur) => (pre || {})[cur], data);
+  return path.split('.').reduce((pre: Object, cur) => (pre || {})[cur], data);
 }
 
 export function getRowIdentity(row: Object, rowKey: any): any {
@@ -122,4 +131,34 @@ export function convertToRows(columns: Array<_Column>): Array<Array<_Column>> {
     rows[column.level - 1].push(column);
   });
   return rows;
+}
+
+const isObject = (obj: Object): boolean => {
+  return Object.prototype.toString.call(obj) === '[object Object]'
+}
+const isArray = (arr: number): boolean => {
+  return Object.prototype.toString.call(arr) === '[object Array]'
+}
+const deepCompare = (obj1: any, obj2: any): boolean => {
+  if (obj1 && obj2 && obj1.length !== obj2.length) {
+    return true
+  } else if (isArray(obj1) && isArray(obj2)) {
+    return obj1.some((value, key) => (
+      deepCompare(value, obj2[key])
+    ))
+  } else if (isObject(obj1) && isObject(obj2)) {
+    for (let key in obj1) {
+      if (deepCompare(obj1[key], obj2[key])) {
+        return true
+      }
+    }
+    return false
+  }
+  return obj1 !== obj2
+}
+
+export {
+  deepCompare,
+  isObject,
+  isArray
 }
