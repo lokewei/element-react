@@ -13,8 +13,32 @@ import pages from './pages';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
+    const theme = window.localStorage.getItem('element-react-fancy-theme') || 'blue';
+    this.changePageTheme(theme);
+    this.state = {
+      theme
+    };
+  }
 
-    this.state = {};
+  changePageTheme(theme) {
+    const themeTag = document.getElementById('theme-tag');
+    themeTag && themeTag.remove();
+    if (theme === 'dark') {
+      themeTag.href = 'element-theme-fancy/lib/index.css';
+      document.documentElement.style.setProperty('--source-background-color', '#404040');
+      // import(
+      //   /* webpackChunkName: "theme-default" */
+      //   'element-theme-fancy'
+      // );
+    }
+    if (theme === 'blue') {
+      themeTag.href = 'element-theme-default/lib/index.css';
+      document.documentElement.style.setProperty('--source-background-color', 'none');
+      // import(
+      //   /* webpackChunkName: "theme-fancy" */
+      //   'element-theme-default'
+      // );
+    }
   }
 
   componentWillMount() {
@@ -100,15 +124,15 @@ export default class App extends React.Component {
   }
 
   switchTheme(theme) {
-    if (theme === 'blue') {
-      location.pathname = '/';
-    }
-    if (theme === 'dark') {
-      location.pathname = '/dark';
-    }
+    window.localStorage.setItem('element-react-fancy-theme', theme);
+    window.location.reload();
+    this.setState({
+      theme
+    });
   }
 
   render() {
+    const { theme } = this.state;
     return (
       <div className="app">
         <header className="header">
@@ -132,10 +156,10 @@ export default class App extends React.Component {
                 <span className={classnames('nav-lang', { active: this.state.locale === 'en-US'})} onClick={this.setLocale.bind(this, 'en-US')}>En</span>
               </li>
             </ul>
-            {/* <ul className="themes">
-              <li title="blue" className={location.pathname === '/' ? 'active' : ''} style={{ backgroundColor: '#20a0ff' }} onClick={() => this.switchTheme('blue')}></li>
-              <li title="dark" className={location.pathname === '/dark' ? 'active' : ''} style={{ backgroundColor: '#2b2b2b' }} onClick={() => this.switchTheme('dark')}></li>
-            </ul> */}
+            <ul className="themes">
+              <li title="blue" className={theme === 'blue' || !theme ? 'active' : ''} style={{ backgroundColor: '#20a0ff' }} onClick={() => this.switchTheme('blue')}></li>
+              <li title="dark" className={theme === 'dark' ? 'active' : ''} style={{ backgroundColor: '#2b2b2b' }} onClick={() => this.switchTheme('dark')}></li>
+            </ul>
           </div>
         </header>
         <div className="main container">

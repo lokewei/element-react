@@ -1,3 +1,7 @@
+:root {
+  --source-background-color: none;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -134,9 +138,11 @@ body {
         border-radius: 4px;
         margin: 0 5px;
         box-sizing: border-box;
+        border: 1px solid #c4c4c4;
+        transition: all 0.5s linear;
 
         &.active, &:hover, &:focus {
-          border: 1px solid #fff;
+          border-color: #fff;
         }
       }
     }
@@ -320,7 +326,7 @@ body {
   }
 
   .source {
-    // background-color: #404040;
+    background-color: var(--source-background-color);
     position: relative;
     padding: 24px;
   }
