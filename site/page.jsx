@@ -24,20 +24,20 @@ export default class App extends React.Component {
     const themeTag = document.getElementById('theme-tag');
     themeTag && themeTag.remove();
     if (theme === 'dark') {
-      themeTag.href = 'element-theme-fancy/lib/index.css';
+      // themeTag.href = 'element-theme-fancy/lib/index.css';
       document.documentElement.style.setProperty('--source-background-color', '#404040');
-      // import(
-      //   /* webpackChunkName: "theme-default" */
-      //   'element-theme-fancy'
-      // );
+      import(
+        /* webpackChunkName: "theme-default" */
+        'element-theme-fancy'
+      );
     }
     if (theme === 'blue') {
-      themeTag.href = 'element-theme-default/lib/index.css';
+      // themeTag.href = 'element-theme-default/lib/index.css';
       document.documentElement.style.setProperty('--source-background-color', 'none');
-      // import(
-      //   /* webpackChunkName: "theme-fancy" */
-      //   'element-theme-default'
-      // );
+      import(
+        /* webpackChunkName: "theme-fancy" */
+        'element-theme-default'
+      );
     }
   }
 
